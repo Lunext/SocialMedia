@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Domain;
 
-namespace Persistence
-{
+namespace Persistence;
+
     public class Seed
     {
         public static async Task SeedData(DataContext context)
@@ -110,4 +110,3 @@ namespace Persistence
             await context.SaveChangesAsync();
         }
     }
-}
