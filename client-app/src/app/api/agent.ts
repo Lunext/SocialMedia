@@ -32,7 +32,7 @@ axios.interceptors.response.use(async response=>{
                 toast.error(data); 
             }
             if(config.method==='get' && data.errors.hasOwnProperty('id')){
-                history.push('/not-found'); 
+                history.push('/cnot-found'); 
             }
 
             if(data.errors){
