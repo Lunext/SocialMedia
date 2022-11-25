@@ -16,7 +16,7 @@ import MyTextArea from '../../../app/common/form/MyTextArea';
 import MySelectInput from '../../../app/common/form/MySelectInput';
 import { categoryOptions } from '../../../app/common/form/options/categoryOptions';
 import MyDateInput from '../../../app/common/form/myDateInput';
-import { Activity } from '../../../app/models/activity';
+import {  ActivityFormValues } from '../../../app/models/activity';
 
 
 
@@ -28,18 +28,10 @@ const ActivityForm=()=>{
 
     const{activityStore}=useStore();
 
-    const{ createActivity, updateActivity,loading,loadActivity, loadingInitial}=activityStore; 
+    const{ createActivity, updateActivity,loadActivity, loadingInitial}=activityStore; 
 
     const{id}=useParams<{id:string}>();
-    const[activity, setActivity]=useState<Activity>({
-        id:'',
-        title:'',
-        category:'', 
-        description:'', 
-        date:null,
-        city:'', 
-        venue:'',
-    });
+    const[activity, setActivity]=useState<ActivityFormValues>(new ActivityFormValues());
 
     const validationSchema=Yup.object({
         title:Yup.string().required('The activity title is required'), 
@@ -54,13 +46,13 @@ const ActivityForm=()=>{
 
 
     useEffect(()=>{
-        if(id) loadActivity(id).then(activity=>setActivity(activity!))
+        if(id) loadActivity(id).then(activity=>setActivity(new ActivityFormValues(activity)))
     },[id,loadActivity]);
 
 
     
-    const handleFromSubmit=(activity:Activity)=>{
-        if(activity.id.length===0){
+    const handleFromSubmit=(activity:ActivityFormValues)=>{
+        if(!activity.id){
 
             let newActivity={
                 ...activity, 
@@ -110,7 +102,7 @@ const ActivityForm=()=>{
                       <MyTextInput placeholder='Venue'name='venue' />
                       <Button 
                       disable={isSubmitting||!dirty||!isValid}
-                      loading={loading}
+                      loading={isSubmitting}
                       floated='right' 
                       positive
                        type='submit'
