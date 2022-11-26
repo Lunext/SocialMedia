@@ -1,4 +1,6 @@
 
+using Domain;
+
 namespace Application.Profiles;
 
     public class Profile
@@ -11,6 +13,8 @@ namespace Application.Profiles;
 
 
         public string Image { get; set; }
+
+        public ICollection<Photo> Photos { get; set; }
 
 
 

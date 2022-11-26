@@ -1,17 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using System.Reflection;
 using Application.Activities;
 using Application.Core;
 using Application.Interfaces;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace API.Extensions
-{
+namespace API.Extensions;
+
     public static class ApplicationServiceExtensions
     {
 
@@ -31,11 +30,18 @@ namespace API.Extensions
                         opt.UseSqlite(config.GetConnectionString("DefaultConnection"));  
                     });
 
-                    services.AddMediatR(typeof(List.Handler).Assembly);
+        
+                    // services.AddMediatR(Assembly.GetExecutingAssembly());
+                    // services.AddMediatR(typeof(Program).Assembly);
+                    //  services.AddMediatR(typeof(List.Handler).Assembly);
+                    services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
                     services.AddAutoMapper(typeof(MappingProfiles));
 
                     services.AddScoped<IUserAccessor,UserAccessor>();
+
+                    services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+                    services.Configure<CloudinarySettings>(config.GetSection("Cloudinary"));
 
                     return services;
 
@@ -43,4 +49,3 @@ namespace API.Extensions
         }
         
     }
-}
